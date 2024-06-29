@@ -12,8 +12,8 @@ import { MaterialCommunityIcons } from "@expo/vector-icons";
 const FormField = ({
     title,
     placeHolder,
-    inputType,
-    contentType,
+    inputType = "default",
+    contentType = "default",
     isError,
     value,
     handleChangeText,
@@ -42,7 +42,9 @@ const FormField = ({
                     value={value}
                     keyboardType={inputType}
                     autoCapitalize={
-                        title === "Email" || "Password" ? "none" : "sentences"
+                        title === "Email" || title === "Password"
+                            ? "none"
+                            : "words"
                     }
                     secureTextEntry={title === "Password" && !showPassword}
                 />

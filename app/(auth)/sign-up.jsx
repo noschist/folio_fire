@@ -66,10 +66,21 @@ const SignUp = () => {
                                     Welcome
                                 </Text>
                                 <Text className="text-gray-400 text-lg">
-                                    Enter your account here
+                                    Create your account here
                                 </Text>
                             </View>
                             <View className="w-full">
+                                <FormField
+                                    title={"Name"}
+                                    placeHolder={"Name"}
+                                    contentType={"name"}
+                                    value={form.name}
+                                    handleChangeText={(e) =>
+                                        setForm({ ...form, name: e })
+                                    }
+                                    isError={isError.name}
+                                    iconText={"person"}
+                                />
                                 <FormField
                                     title={"Email"}
                                     placeHolder={"Email"}
@@ -85,7 +96,6 @@ const SignUp = () => {
                                 <FormField
                                     title={"Password"}
                                     placeHolder={"Password"}
-                                    inputType={"default"}
                                     contentType={"default"}
                                     value={form.password}
                                     handleChangeText={(e) =>
@@ -94,14 +104,8 @@ const SignUp = () => {
                                     isError={isError.password}
                                     iconText={"password"}
                                 />
-                                <Link
-                                    className="text-gray-300 text-right mt-2 mr-1"
-                                    href="/forgot-pass"
-                                >
-                                    Forgot password?
-                                </Link>
                                 <CustomButton
-                                    title="SIGN IN"
+                                    title="SIGN UP"
                                     handlePress={handleNormalSignup}
                                     containerStyles="w-full mt-7 bg-[#9a4924]"
                                     isLoading={false}
@@ -115,14 +119,15 @@ const SignUp = () => {
                             <GoogleButton
                                 containerStyles="w-full"
                                 handlePress={handleGoogleSignup}
+                                isLoginBtn={false}
                             />
                             <Text className="text-white absolute bottom-8 text-lg">
-                                Don&apos;t have an account?{" "}
+                                Already have an account?{" "}
                                 <Link
                                     className="text-secondary-200"
                                     href={"/sign-up"}
                                 >
-                                    Sign Up
+                                    Log In
                                 </Link>
                             </Text>
                             {alertVisible && (

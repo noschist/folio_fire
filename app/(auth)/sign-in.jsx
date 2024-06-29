@@ -81,8 +81,6 @@ const SignIn = () => {
                                 <FormField
                                     title={"Password"}
                                     placeHolder={"Password"}
-                                    inputType={"default"}
-                                    contentType={"default"}
                                     value={form.password}
                                     handleChangeText={(e) =>
                                         setForm({ ...form, password: e })

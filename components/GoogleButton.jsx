@@ -7,6 +7,7 @@ const GoogleButton = ({
     isLoading,
     containerStyles,
     textStyles,
+    isLoginBtn = true,
 }) => {
     return (
         <TouchableOpacity
@@ -25,7 +26,7 @@ const GoogleButton = ({
             <Text
                 className={`text-[#af5329] text-center w-[87%] font-pmedium text-xl ${textStyles}`}
             >
-                Sign In With Google
+                {`Sign ${isLoginBtn ? "In" : "Up"} With Google`}
             </Text>
         </TouchableOpacity>
     );
