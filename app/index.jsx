@@ -7,19 +7,14 @@ import { Redirect, router } from "expo-router";
 
 const Welcome = () => {
     return (
-        <View className="flex flex-1">
+        <View className="w-full h-full">
             <ImageBackground
                 source={require("../assets/images/bgo3.png")}
                 resizeMode="cover"
-                className="flex flex-1"
             >
-                <SafeAreaView className="h-full">
-                    <ScrollView
-                        contentContainerStyle={{
-                            height: "100%",
-                        }}
-                    >
-                        <View className="flex flex-1 items-center justify-between p-8">
+                <SafeAreaView>
+                    <ScrollView>
+                        <View className="flex h-screen items-center justify-between p-8">
                             <Image
                                 source={images.logo}
                                 className="max-w-24 max-h-24 mt-7"
@@ -37,7 +32,7 @@ const Welcome = () => {
                                 <CustomButton
                                     title="Get Started"
                                     handlePress={() => router.push("/sign-in")}
-                                    containerStyles="w-full mt-7"
+                                    containerStyles="w-full mt-7 bg-[#ca6232]"
                                     isLoading={false}
                                 />
                             </View>
