@@ -1,20 +1,19 @@
+import { Link } from "expo-router";
+import React, { useState } from "react";
 import {
-    Text,
-    View,
-    ScrollView,
     Dimensions,
     Image,
     ImageBackground,
-    Alert,
+    ScrollView,
+    Text,
+    View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import React, { useState } from "react";
-import { images } from "../../constants";
-import FormField from "../../components/FormField";
-import CustomButton from "../../components/CustomButton";
-import GoogleButton from "../../components/GoogleButton";
-import { Link } from "expo-router";
 import CustomAlert from "../../components/CustomAlert";
+import CustomButton from "../../components/CustomButton";
+import FormField from "../../components/FormField";
+import GoogleButton from "../../components/GoogleButton";
+import { images } from "../../constants";
 
 const SignIn = () => {
     const [form, setForm] = useState({
@@ -27,18 +26,62 @@ const SignIn = () => {
         password: false,
     });
 
-    const loginNormal = async () => {
+    const [errMsg, setErrMsg] = useState({
+        title: "",
+        subtitle: "",
+    });
+
+    const [alertVisible, setAlertVisible] = useState(false);
+
+    const showAlert = () => {
+        setAlertVisible(true);
+    };
+
+    const hideAlert = () => {
+        setAlertVisible(false);
+    };
+
+    const isValidEmail = (email) => {
+        return /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email);
+    };
+
+    const loginNormal = () => {
         if (form.email === "" && form.password === "") {
-            Alert.alert("Error", `${form.email} Please fill in all fields`);
-            setIsError({ ...isError, email: true, password: true });
-        } else if (form.email === "" && form.password !== "") {
-            Alert.alert("Error", "Please fill in the email");
-            setIsError({ ...isError, email: true, password: false });
-        } else if (form.email !== "" && form.password === "") {
-            Alert.alert("Error", "Please fill in the password");
-            setIsError({ ...isError, email: false, password: true });
+            setErrMsg({
+                title: "Empty Fields!",
+                subtitle: "Please fill in both fields",
+            });
+            setIsError({ email: true, password: true });
+            showAlert();
+        } else if (form.email === "") {
+            setErrMsg({
+                title: "Empty Email!",
+                subtitle: "Please fill in the email",
+            });
+            setIsError({ email: true, password: false });
+            showAlert();
+        } else if (form.password === "") {
+            setErrMsg({
+                title: "Empty Password!",
+                subtitle: "Please fill in the password",
+            });
+            setIsError({ email: false, password: true });
+            showAlert();
+        } else if (!isValidEmail(form.email)) {
+            setErrMsg({
+                title: "Invalid Email!",
+                subtitle: "Please enter a valid email address",
+            });
+            setIsError({ email: true, password: false });
+            showAlert();
         } else {
-            setIsError({ ...isError, email: false, password: false });
+            setErrMsg({
+                title: "",
+                subtitle: "",
+            });
+            setIsError({ email: false, password: false });
+            hideAlert();
+            isValid = true;
         }
     };
 
@@ -98,6 +141,12 @@ const SignIn = () => {
                                     isError={isError.password}
                                     iconText={"password"}
                                 />
+                                <Link
+                                    className="text-gray-300 text-right mt-2 mr-1"
+                                    href="/forgot-pass"
+                                >
+                                    Forgot password?
+                                </Link>
                                 <CustomButton
                                     title="SIGN IN"
                                     handlePress={loginNormal}
@@ -123,10 +172,13 @@ const SignIn = () => {
                                     Sign Up
                                 </Link>
                             </Text>
-                            <CustomAlert
-                                title={"Error loggin in!"}
-                                subtitle="lorem ipsum error msg bro testing"
-                            />
+                            {alertVisible && (
+                                <CustomAlert
+                                    title={errMsg.title}
+                                    subtitle={errMsg.subtitle}
+                                    onClose={hideAlert}
+                                />
+                            )}
                         </View>
                     </ScrollView>
                 </SafeAreaView>

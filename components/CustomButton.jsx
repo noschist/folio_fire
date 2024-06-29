@@ -10,7 +10,7 @@ const CustomButton = ({
     return (
         <TouchableOpacity
             onPress={handlePress}
-            activeOpacity={0.7}
+            activeOpacity={0.5}
             className={`rounded-lg min-h-[55px] flex flex-row justify-center items-center ${containerStyles} ${
                 isLoading ? "opacity-50" : ""
             }`}

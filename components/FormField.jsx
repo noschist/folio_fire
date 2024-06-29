@@ -26,7 +26,7 @@ const FormField = ({
             <View
                 className={`w-full h-16 px-4 ${
                     !isError ? "bg-[#281d2e]" : "bg-[#441010]"
-                } rounded-lg border-2 gap-2 border-[#1b0e17] focus:border-secondary flex flex-row items-center`}
+                } rounded-lg border-2 gap-2 border-[#1b0e17] flex flex-row items-center`}
             >
                 <MaterialIcons
                     name={iconText}
