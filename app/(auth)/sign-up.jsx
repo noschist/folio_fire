@@ -14,25 +14,16 @@ import CustomButton from "../../components/CustomButton";
 import FormField from "../../components/FormField";
 import GoogleButton from "../../components/GoogleButton";
 import { images } from "../../constants";
+import { validateForm } from "../../utils/formValidations";
 
 const SignUp = () => {
-    const [form, setForm] = useState({
-        name: "",
-        email: "",
-        password: "",
-    });
-
+    const [form, setForm] = useState({ name: "", email: "", password: "" });
+    const [errMsg, setErrMsg] = useState({ title: "", subtitle: "" });
     const [isError, setIsError] = useState({
         name: false,
         email: false,
         password: false,
     });
-
-    const [errMsg, setErrMsg] = useState({
-        title: "",
-        subtitle: "",
-    });
-
     const [alertVisible, setAlertVisible] = useState(false);
 
     const showAlert = () => {
@@ -43,58 +34,11 @@ const SignUp = () => {
         setAlertVisible(false);
     };
 
-    const isValidEmail = (email) => {
-        return /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email);
+    const handleNormalSignup = () => {
+        validateForm(form, setErrMsg, setIsError, showAlert, hideAlert, true); // Passing true to validate name
     };
 
-    const loginNormal = () => {
-        if (form.email === "" && form.password === "") {
-            setErrMsg({
-                title: "Empty Fields!",
-                subtitle: "Please fill in both fields",
-            });
-            setIsError({ email: true, password: true });
-            showAlert();
-        } else if (form.email === "") {
-            setErrMsg({
-                title: "Empty Email!",
-                subtitle: "Please fill in the email",
-            });
-            setIsError({ email: true, password: false });
-            showAlert();
-        } else if (form.password === "") {
-            setErrMsg({
-                title: "Empty Password!",
-                subtitle: "Please fill in the password",
-            });
-            setIsError({ email: false, password: true });
-            showAlert();
-        } else if (!isValidEmail(form.email)) {
-            setErrMsg({
-                title: "Invalid Email!",
-                subtitle: "Please enter a valid email address",
-            });
-            setIsError({ email: true, password: false });
-            showAlert();
-        } else if (form.password.length < 12) {
-            setErrMsg({
-                title: "Invalid Password!",
-                subtitle: "Password length should be minimum 12",
-            });
-            setIsError({ email: true, password: false });
-            showAlert();
-        } else {
-            setErrMsg({
-                title: "",
-                subtitle: "",
-            });
-            setIsError({ email: false, password: false });
-            hideAlert();
-            isValid = true;
-        }
-    };
-
-    const loginGoogle = async () => {};
+    const handleGoogleSignup = async () => {};
 
     return (
         <View className="w-full h-full">
@@ -158,7 +102,7 @@ const SignUp = () => {
                                 </Link>
                                 <CustomButton
                                     title="SIGN IN"
-                                    handlePress={loginNormal}
+                                    handlePress={handleNormalSignup}
                                     containerStyles="w-full mt-7 bg-[#9a4924]"
                                     isLoading={false}
                                 />
@@ -170,7 +114,7 @@ const SignUp = () => {
                             </View>
                             <GoogleButton
                                 containerStyles="w-full"
-                                handlePress={loginGoogle}
+                                handlePress={handleGoogleSignup}
                             />
                             <Text className="text-white absolute bottom-8 text-lg">
                                 Don&apos;t have an account?{" "}
