@@ -125,7 +125,8 @@ const SignUp = () => {
                                 Already have an account?{" "}
                                 <Link
                                     className="text-secondary-200"
-                                    href={"/sign-up"}
+                                    href={"/sign-in"}
+                                    replace
                                 >
                                     Log In
                                 </Link>
