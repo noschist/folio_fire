@@ -12,6 +12,7 @@ local.properties
 *.hprof
 .cxx/
 app/*.keystore
+app/google-services.json
 
 # Bundle artifacts
 *.jsbundle
