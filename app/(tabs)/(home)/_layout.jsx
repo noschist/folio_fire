@@ -1,9 +1,9 @@
 import { View, Text } from "react-native";
 import React from "react";
-import { Redirect, SplashScreen } from "expo-router";
+import { Redirect, Stack } from "expo-router";
 import { useAuth } from "../../../utils/AuthProvider";
 
-const TabsLayout = () => {
+const HomeLayout = () => {
     const { user, loading } = useAuth();
     if (!loading && !user.emailVerified) {
         return <Redirect href={"/verify-email"} />;
@@ -15,10 +15,10 @@ const TabsLayout = () => {
         return null;
     }
     return (
-        <View>
-            <Text>TabsLayout</Text>
-        </View>
+        <Stack>
+            <Stack.Screen name="home" />
+        </Stack>
     );
 };
 
-export default TabsLayout;
+export default HomeLayout;

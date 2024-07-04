@@ -1,20 +1,18 @@
 import auth from "@react-native-firebase/auth";
 
-export const registerWithPass = (name, email, pass) => {
-    auth()
-        .createUserWithEmailAndPassword(email, pass)
-        .then((userCred) => {
-            userCred.user.updateProfile({
-                displayName: name,
-            });
-            userCred.user.sendEmailVerification({
-                handleCodeInApp: true,
-                url: "folio://verify-email",
-            });
-        })
-        .catch((error) => {
-            throw error;
+export const registerWithPass = async (name, email, pass) => {
+    try {
+        const userCred = await auth().createUserWithEmailAndPassword(
+            email,
+            pass
+        );
+        await userCred.user.updateProfile({
+            displayName: name,
         });
+        await userCred.user.sendEmailVerification();
+    } catch (error) {
+        throw error;
+    }
 };
 
 export const signinWithPass = (email, pass) => {

@@ -37,7 +37,7 @@ const SignUp = () => {
         setAlertVisible(false);
     };
 
-    const handleNormalSignup = () => {
+    const handleNormalSignup = async () => {
         const inValRes = validateForm(
             form,
             setErrMsg,
@@ -48,7 +48,7 @@ const SignUp = () => {
         ); // Passing true to validate name
         if (!inValRes) {
             try {
-                registerWithPass(form.name, form.email, form.password);
+                await registerWithPass(form.name, form.email, form.password);
                 router.replace("/verify-email");
             } catch (error) {
                 if (error.code === "auth/email-already-in-use") {
