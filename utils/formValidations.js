@@ -18,6 +18,13 @@ export const validateForm = (
         errMsg = { title: "Empty Name!", subtitle: "Please fill in the name" };
         errors.name = true;
         isError = true;
+    } else if (validateName && !isValidFullName(form.name)) {
+        errMsg = {
+            title: "Invalid Name!",
+            subtitle: "Please enter a valid name",
+        };
+        errors.name = true;
+        isError = true;
     } else if (form.email === "" && form.password === "") {
         errMsg = {
             title: "Empty Fields!",
@@ -57,8 +64,15 @@ export const validateForm = (
     } else {
         hideAlert();
     }
+
+    return isError;
 };
 
 const isValidEmail = (email) => {
     return /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email);
+};
+
+const isValidFullName = (fullName) => {
+    const regex = /^[a-zA-ZÀ-ÿ-']+(?:\s[a-zA-ZÀ-ÿ-']+)*$/;
+    return regex.test(fullName);
 };

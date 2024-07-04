@@ -2,7 +2,7 @@ import { Image, ImageBackground, Text, View, ScrollView } from "react-native";
 import React from "react";
 import { images } from "../constants";
 import { SafeAreaView } from "react-native-safe-area-context";
-import CustomButton from "../components/CustomButton";
+import { CustomButton } from "../components";
 import { Redirect, router } from "expo-router";
 
 const Welcome = () => {

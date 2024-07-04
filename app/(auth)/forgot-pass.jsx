@@ -1,19 +1,16 @@
-import {
-    View,
-    Text,
-    ScrollView,
-    ImageBackground,
-    Dimensions,
-    TouchableOpacity,
-    StyleSheet,
-} from "react-native";
-import React, { useState } from "react";
-import { SafeAreaView } from "react-native-safe-area-context";
 import { MaterialIcons } from "@expo/vector-icons";
 import { Link } from "expo-router";
-import FormField from "../../components/FormField";
-import CustomButton from "../../components/CustomButton";
-import CustomAlert from "../../components/CustomAlert";
+import React, { useState } from "react";
+import {
+    Dimensions,
+    ImageBackground,
+    ScrollView,
+    StyleSheet,
+    Text,
+    View,
+} from "react-native";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { CustomAlert, CustomButton, FormField } from "../../components";
 
 const ForgotPass = () => {
     const [form, setForm] = useState({ name: "", email: "", password: "" });

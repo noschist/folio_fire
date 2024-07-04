@@ -1,4 +1,4 @@
-import { Link } from "expo-router";
+import { Link, router } from "expo-router";
 import React, { useState } from "react";
 import {
     Dimensions,
@@ -9,11 +9,14 @@ import {
     View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import CustomAlert from "../../components/CustomAlert";
-import CustomButton from "../../components/CustomButton";
-import FormField from "../../components/FormField";
-import GoogleButton from "../../components/GoogleButton";
+import {
+    CustomAlert,
+    CustomButton,
+    FormField,
+    GoogleButton,
+} from "../../components";
 import { images } from "../../constants";
+import { registerWithPass } from "../../utils/authUser";
 import { validateForm } from "../../utils/formValidations";
 
 const SignUp = () => {
@@ -35,7 +38,52 @@ const SignUp = () => {
     };
 
     const handleNormalSignup = () => {
-        validateForm(form, setErrMsg, setIsError, showAlert, hideAlert, true); // Passing true to validate name
+        const inValRes = validateForm(
+            form,
+            setErrMsg,
+            setIsError,
+            showAlert,
+            hideAlert,
+            true
+        ); // Passing true to validate name
+        if (!inValRes) {
+            try {
+                registerWithPass(form.name, form.email, form.password);
+                router.replace("/verify-email");
+            } catch (error) {
+                if (error.code === "auth/email-already-in-use") {
+                    setErrMsg({
+                        title: "Email Already in Use",
+                        subtitle:
+                            "The email address you entered is already registered.",
+                    });
+                    setIsError({ email: true });
+                } else if (error.code === "auth/invalid-email") {
+                    setErrMsg({
+                        title: "Invalid Email Address",
+                        subtitle: "Please enter a valid email address.",
+                    });
+                    setIsError({ email: true });
+                } else if (error.code === "auth/weak-password") {
+                    setErrMsg({
+                        title: "Weak Password",
+                        subtitle:
+                            "Password should be at least 6 characters long.",
+                    });
+                    setIsError({ password: true });
+                } else {
+                    // Handle other errors
+                    console.error(error);
+                    setErrMsg({
+                        title: "Sign Up Failed",
+                        subtitle:
+                            "An unexpected error occurred. Please try again later.",
+                    });
+                    setIsError({ email: false, password: false });
+                }
+                showAlert();
+            }
+        }
     };
 
     const handleGoogleSignup = async () => {};
