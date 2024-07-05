@@ -28,6 +28,7 @@ const SignUp = () => {
         password: false,
     });
     const [alertVisible, setAlertVisible] = useState(false);
+    const [submitting, setSubmitting] = useState(false);
 
     const showAlert = () => {
         setAlertVisible(true);
@@ -38,18 +39,25 @@ const SignUp = () => {
     };
 
     const handleNormalSignup = async () => {
-        const inValRes = validateForm(
+        const isValidForm = validateForm(
             form,
             setErrMsg,
             setIsError,
             showAlert,
             hideAlert,
             true
-        ); // Passing true to validate name
-        if (!inValRes) {
+        );
+        if (isValidForm) {
+            setSubmitting(true);
             try {
-                await registerWithPass(form.name, form.email, form.password);
-                router.replace("/verify-email");
+                const userCred = await registerWithPass(
+                    form.name,
+                    form.email,
+                    form.password
+                );
+                if (userCred && !userCred.user.emailVerified) {
+                    router.replace("/verify-email");
+                }
             } catch (error) {
                 if (error.code === "auth/email-already-in-use") {
                     setErrMsg({
@@ -73,7 +81,6 @@ const SignUp = () => {
                     setIsError({ password: true });
                 } else {
                     // Handle other errors
-                    console.error(error);
                     setErrMsg({
                         title: "Sign Up Failed",
                         subtitle:
@@ -82,6 +89,8 @@ const SignUp = () => {
                     setIsError({ email: false, password: false });
                 }
                 showAlert();
+            } finally {
+                setSubmitting(false);
             }
         }
     };
@@ -151,12 +160,13 @@ const SignUp = () => {
                                     }
                                     isError={isError.password}
                                     iconText={"password"}
+                                    keyType="done"
                                 />
                                 <CustomButton
                                     title="SIGN UP"
                                     handlePress={handleNormalSignup}
                                     containerStyles="w-full mt-7 bg-[#9a4924]"
-                                    isLoading={false}
+                                    isLoading={submitting}
                                 />
                             </View>
                             <View className="flex-row w-full items-center justify-between gap-2 my-6">
@@ -168,6 +178,7 @@ const SignUp = () => {
                                 containerStyles="w-full"
                                 handlePress={handleGoogleSignup}
                                 isLoginBtn={false}
+                                isLoading={submitting}
                             />
                             <Text className="text-white absolute bottom-8 text-lg">
                                 Already have an account?{" "}

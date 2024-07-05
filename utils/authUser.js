@@ -6,24 +6,25 @@ export const registerWithPass = async (name, email, pass) => {
             email,
             pass
         );
-        await userCred.user.updateProfile({
-            displayName: name,
-        });
-        await userCred.user.sendEmailVerification();
+        if (userCred) {
+            await userCred.user.updateProfile({
+                displayName: name,
+            });
+            await userCred.user.sendEmailVerification();
+        }
+        return userCred;
     } catch (error) {
         throw error;
     }
 };
 
-export const signinWithPass = (email, pass) => {
-    auth()
-        .signInWithEmailAndPassword(email, pass)
-        .then((userCred) => {
-            return userCred;
-        })
-        .catch((error) => {
-            throw error;
-        });
+export const signinWithPass = async (email, pass) => {
+    try {
+        const userCred = await auth().signInWithEmailAndPassword(email, pass);
+        return userCred;
+    } catch (error) {
+        throw error;
+    }
 };
 
 export const signinWithGoogle = () => {
@@ -32,29 +33,34 @@ export const signinWithGoogle = () => {
     return userCred;
 };
 
-export const signOut = () => {
-    auth().signOut();
-};
-
-export const sendRestPassEmail = (email) => {
-    auth().sendPasswordResetEmail(email, {
-        handleCodeInApp: true,
-        url: "folio://reset-pass",
-    });
-};
-
-export const handleEmailVerif = (mode, oobcode) => {
-    if (mode === "verifyEmail" && oobcode) {
-        auth()
-            .applyActionCode(oobcode)
-            .catch((error) => {
-                throw error;
-            });
+export const signOut = async () => {
+    try {
+        await auth().signOut();
+    } catch (error) {
+        throw error;
     }
 };
 
-export const handleForgotPass = (mode, oobcode, newPass) => {
-    if (mode === "resetPassword" && oobcode && newPass) {
-        auth().confirmPasswordReset(oobcode, newPass);
+export const sendRestPassEmail = async (email) => {
+    try {
+        await auth().sendPasswordResetEmail(email);
+    } catch (error) {
+        throw error;
     }
 };
+
+// export const handleEmailVerif = (mode, oobcode) => {
+//     if (mode === "verifyEmail" && oobcode) {
+//         auth()
+//             .applyActionCode(oobcode)
+//             .catch((error) => {
+//                 throw error;
+//             });
+//     }
+// };
+
+// export const handleForgotPass = (mode, oobcode, newPass) => {
+//     if (mode === "resetPassword" && oobcode && newPass) {
+//         auth().confirmPasswordReset(oobcode, newPass);
+//     }
+// };

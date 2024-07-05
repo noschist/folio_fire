@@ -3,28 +3,36 @@ import auth from "@react-native-firebase/auth";
 
 const AuthContext = createContext();
 
-export function useAuth() {
-    return useContext(AuthContext);
-}
+export const useAuthContext = () => useContext(AuthContext);
 
-export function AuthProvider({ children }) {
+const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        const unsubscribe = auth().onAuthStateChanged((user) => {
+        const unsubscribe = auth().onAuthStateChanged(async (user) => {
             if (user) {
-                setUser(user);
+                await user.reload();
+                setUser(auth().currentUser);
+            } else {
+                setUser(null);
             }
             setLoading(false);
         });
 
-        return unsubscribe;
+        return () => unsubscribe(); // Cleanup subscription on unmount
     }, []);
 
     return (
-        <AuthContext.Provider value={{ user, loading }}>
+        <AuthContext.Provider
+            value={{
+                user,
+                loading,
+            }}
+        >
             {children}
         </AuthContext.Provider>
     );
-}
+};
+
+export default AuthProvider;

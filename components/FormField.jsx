@@ -18,6 +18,7 @@ const FormField = ({
     value,
     handleChangeText,
     iconText,
+    keyType = "next",
 }) => {
     const [showPassword, setShowPassword] = useState(false);
     return (
@@ -41,6 +42,7 @@ const FormField = ({
                     onChangeText={handleChangeText}
                     value={value}
                     keyboardType={inputType}
+                    returnKeyType={keyType}
                     autoCapitalize={
                         title === "Email" || title === "Password"
                             ? "none"

@@ -1,7 +1,18 @@
-import { Stack } from "expo-router";
+import { router, Stack } from "expo-router";
+import { useEffect } from "react";
 import { StatusBar } from "react-native";
+import { useAuthContext } from "../../utils/AuthProvider";
 
 const AuthLayout = () => {
+    const { user, loading } = useAuthContext();
+
+    useEffect(() => {
+        if (!loading && user) {
+            // <Redirect href={"/home"} />;
+            router.replace("/home");
+        }
+    }, [user, loading]);
+
     return (
         <>
             <Stack>
@@ -24,6 +35,13 @@ const AuthLayout = () => {
                     options={{
                         headerShown: false,
                         animation: "slide_from_bottom",
+                    }}
+                />
+                <Stack.Screen
+                    name="verify-email"
+                    options={{
+                        headerShown: false,
+                        animation: "slide_from_right",
                     }}
                 />
             </Stack>

@@ -1,12 +1,31 @@
-import { Image, ImageBackground, Text, View, ScrollView } from "react-native";
-import React from "react";
-import { images } from "../constants";
+import { router } from "expo-router";
+import React, { useEffect } from "react";
+import { Image, ImageBackground, ScrollView, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { CustomButton } from "../components";
-import { Redirect, router } from "expo-router";
+import { CustomButton, Loader } from "../components";
+import { images } from "../constants";
+import { useAuthContext } from "../utils/AuthProvider";
 
 const Welcome = () => {
-    return (
+    const { user, loading } = useAuthContext();
+
+    useEffect(() => {
+        if (!loading) {
+            if (user) {
+                if (user.emailVerified) {
+                    // <Redirect href={"/home"} />;
+                    router.replace("/home");
+                } else {
+                    // <Redirect href={"/verify-email"} />;
+                    router.replace("/verify-email");
+                }
+            }
+        }
+    }, [user, loading]);
+
+    return loading ? (
+        <Loader />
+    ) : (
         <View className="w-full h-full">
             <ImageBackground
                 source={require("../assets/images/bgo3.png")}

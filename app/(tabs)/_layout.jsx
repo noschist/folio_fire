@@ -1,14 +1,31 @@
-import { View, Text } from "react-native";
-import React from "react";
-import { Tabs } from "expo-router";
+import { router, Tabs } from "expo-router";
+import React, { useEffect } from "react";
+import { Loader } from "../../components";
+import { useAuthContext } from "../../utils/AuthProvider";
 
 const TabsLayout = () => {
-    return (
-        <>
-            <Tabs>
-                <Tabs.Screen name="(home)" />
-            </Tabs>
-        </>
+    const { user, loading } = useAuthContext();
+
+    useEffect(() => {
+        if (!loading) {
+            if (user) {
+                if (!user.emailVerified) {
+                    // <Redirect href={"/verify-email"} />;
+                    router.replace("/verify-email");
+                }
+            } else {
+                // <Redirect href={"/"} />;
+                router.replace("/");
+            }
+        }
+    }, [user, loading]);
+
+    return loading ? (
+        <Loader />
+    ) : (
+        <Tabs>
+            <Tabs.Screen name="home" />
+        </Tabs>
     );
 };
 

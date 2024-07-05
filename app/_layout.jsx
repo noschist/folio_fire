@@ -1,9 +1,9 @@
-import "../global.css";
-import { useEffect } from "react";
 import { useFonts } from "expo-font";
 import { SplashScreen, Stack } from "expo-router";
+import { useEffect } from "react";
 import { StatusBar } from "react-native";
-import { AuthProvider } from "../utils/AuthProvider";
+import "../global.css";
+import AuthProvider from "../utils/AuthProvider";
 
 SplashScreen.preventAutoHideAsync();
 
@@ -50,7 +50,7 @@ const RootLayout = () => {
             <AuthProvider>
                 <Stack>
                     <Stack.Screen
-                        name="index"
+                        name="(tabs)"
                         options={{
                             headerShown: false,
                         }}
@@ -62,7 +62,7 @@ const RootLayout = () => {
                         }}
                     />
                     <Stack.Screen
-                        name="(tabs)"
+                        name="index"
                         options={{
                             headerShown: false,
                         }}

@@ -65,7 +65,7 @@ export const validateForm = (
         hideAlert();
     }
 
-    return isError;
+    return !isError;
 };
 
 const isValidEmail = (email) => {
