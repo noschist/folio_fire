@@ -1,5 +1,5 @@
 import { router, Tabs } from "expo-router";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Loader } from "../../components";
 import { useAuthContext } from "../../utils/AuthProvider";
 
@@ -10,11 +10,9 @@ const TabsLayout = () => {
         if (!loading) {
             if (user) {
                 if (!user.emailVerified) {
-                    // <Redirect href={"/verify-email"} />;
                     router.replace("/verify-email");
                 }
             } else {
-                // <Redirect href={"/"} />;
                 router.replace("/");
             }
         }

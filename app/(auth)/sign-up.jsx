@@ -56,6 +56,7 @@ const SignUp = () => {
                     form.password
                 );
                 if (userCred && !userCred.user.emailVerified) {
+                    router.dismissAll();
                     router.replace("/verify-email");
                 }
             } catch (error) {

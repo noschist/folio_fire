@@ -1,5 +1,5 @@
 import { router } from "expo-router";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Image, ImageBackground, ScrollView, Text, View } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { CustomButton, Loader } from "../components";
@@ -13,10 +13,8 @@ const Welcome = () => {
         if (!loading) {
             if (user) {
                 if (user.emailVerified) {
-                    // <Redirect href={"/home"} />;
                     router.replace("/home");
                 } else {
-                    // <Redirect href={"/verify-email"} />;
                     router.replace("/verify-email");
                 }
             }

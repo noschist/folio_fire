@@ -1,18 +1,7 @@
-import { router, Stack } from "expo-router";
-import { useEffect } from "react";
+import { Stack } from "expo-router";
 import { StatusBar } from "react-native";
-import { useAuthContext } from "../../utils/AuthProvider";
 
 const AuthLayout = () => {
-    const { user, loading } = useAuthContext();
-
-    useEffect(() => {
-        if (!loading && user) {
-            // <Redirect href={"/home"} />;
-            router.replace("/home");
-        }
-    }, [user, loading]);
-
     return (
         <>
             <Stack>
