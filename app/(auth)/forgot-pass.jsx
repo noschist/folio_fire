@@ -11,6 +11,7 @@ import {
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { CustomAlert, CustomButton, FormField } from "../../components";
+import { sendRestPassEmail } from "../../utils/authUser";
 
 const ForgotPass = () => {
     const [form, setForm] = useState({ name: "", email: "", password: "" });
@@ -34,7 +35,7 @@ const ForgotPass = () => {
         return /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email);
     };
 
-    const handleForgotPass = () => {
+    const handleForgotPass = async () => {
         if (form.email === "") {
             setErrMsg({
                 title: "Empty Email!",
@@ -50,7 +51,25 @@ const ForgotPass = () => {
             setIsError({ email: true });
             showAlert();
         } else {
-            hideAlert();
+            try {
+                await sendRestPassEmail(form.email);
+            } catch (error) {
+                if (error.code === "auth/invalid-email") {
+                    setErrMsg({
+                        title: "Invalid Email!",
+                        subtitle: "Please enter a valid email address",
+                    });
+                    setIsError({ email: true });
+                } else if (error.code === "auth/user-not-found") {
+                    setErrMsg({
+                        title: "Invalid Email!",
+                        subtitle:
+                            "This email address is not associated with any account",
+                    });
+                    setIsError({ email: true });
+                }
+                showAlert();
+            }
         }
     };
 

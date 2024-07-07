@@ -1,5 +1,5 @@
 import { MaterialIcons } from "@expo/vector-icons";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
     Dimensions,
     ImageBackground,
@@ -16,9 +16,19 @@ import { sendVerificEmail } from "../../utils/authUser";
 const VerifyEmail = () => {
     const { user, loading } = useAuthContext();
     let userEmail = "";
-    if (!loading) {
-        userEmail = user.email;
-    }
+
+    useEffect(() => {
+        if (!loading) {
+            if (user) {
+                userEmail = user.email;
+                if (user.emailVerified) {
+                    router.dismissAll();
+                    router.replace("/home");
+                }
+            }
+        }
+    }, [user, loading]);
+
     const [alertVisible, setAlertVisible] = useState(false);
     const [errMsg, setErrMsg] = useState({ title: "", subtitle: "" });
     const [submitting, setSubmitting] = useState(false);
