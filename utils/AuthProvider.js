@@ -11,15 +11,18 @@ const AuthProvider = ({ children }) => {
 
     useEffect(() => {
         const unsubscribe = auth().onAuthStateChanged(async (user) => {
-            if (user) {
-                await user.reload();
-                setUser(auth().currentUser);
-            } else {
-                setUser(null);
+            try {
+                if (user) {
+                    await user.reload();
+                    setUser(auth().currentUser);
+                } else {
+                    setUser(null);
+                }
+                setLoading(false);
+            } catch (error) {
+                setLoading(false);
             }
-            setLoading(false);
         });
-
         return () => unsubscribe(); // Cleanup subscription on unmount
     }, []);
 

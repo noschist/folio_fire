@@ -17,7 +17,7 @@ import {
 } from "../../components";
 import { images } from "../../constants";
 import { validateForm } from "../../utils/formValidations";
-import { signinWithPass } from "../../utils/authUser";
+import { signinWithGoogle, signinWithPass } from "../../utils/authUser";
 
 const SignIn = () => {
     const [form, setForm] = useState({ email: "", password: "" });
@@ -50,7 +50,7 @@ const SignIn = () => {
                     form.password
                 );
                 if (userCred) {
-                    // router.dismissAll();
+                    router.dismissAll();
                     if (userCred.user.emailVerified) {
                         router.replace("/home");
                     } else {
@@ -58,14 +58,54 @@ const SignIn = () => {
                     }
                 }
             } catch (error) {
-                //TODO: Implement error codes
+                if (
+                    error.code === "auth/user-not-found" ||
+                    error.code === "auth/wrong-password"
+                ) {
+                    setErrMsg({
+                        title: "Invalid Credentials",
+                        subtitle: "Please check your email and password.",
+                    });
+                    setIsError({ email: true, password: true });
+                } else if (error.code === "auth/invalid-email") {
+                    setErrMsg({
+                        title: "Invalid Email Address",
+                        subtitle: "Please enter a valid email address.",
+                    });
+                    setIsError({ email: true, password: false });
+                } else {
+                    setErrMsg({
+                        title: "Sign In Failed",
+                        subtitle:
+                            "An unexpected error occurred. Please try again later.",
+                    });
+                    setIsError({ email: false, password: false });
+                }
+                showAlert();
             } finally {
                 setSubmitting(false);
             }
         }
     };
 
-    const handleGoogleLogin = async () => {};
+    const handleGoogleLogin = async () => {
+        setSubmitting(true);
+        try {
+            const userCred = await signinWithGoogle();
+            if (userCred.user) {
+                router.dismissAll();
+                router.replace("/home");
+            }
+        } catch (error) {
+            setErrMsg({
+                title: "Sign Up Failed",
+                subtitle:
+                    "An unexpected error occurred. Please try again later.",
+            });
+        } finally {
+            setSubmitting(false);
+        }
+    };
 
     return (
         <View className="w-full h-full">

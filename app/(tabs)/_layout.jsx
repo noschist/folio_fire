@@ -10,6 +10,7 @@ const TabsLayout = () => {
         if (!loading) {
             if (user) {
                 if (!user.emailVerified) {
+                    router.dismissAll();
                     router.replace("/verify-email");
                 }
             } else {

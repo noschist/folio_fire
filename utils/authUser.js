@@ -1,4 +1,5 @@
 import auth from "@react-native-firebase/auth";
+import { GoogleSignin } from "@react-native-google-signin/google-signin";
 
 export const registerWithPass = async (name, email, pass) => {
     try {
@@ -27,10 +28,21 @@ export const signinWithPass = async (email, pass) => {
     }
 };
 
-export const signinWithGoogle = () => {
-    const creds = auth.GoogleAuthProvider;
-    const userCred = auth().signInWithPopup(creds);
-    return userCred;
+export const signinWithGoogle = async () => {
+    try {
+        const clientID = process.env.EXPO_PUBLIC_CLIENT_ID;
+        GoogleSignin.configure({
+            webClientId: clientID,
+        });
+        await GoogleSignin.hasPlayServices({
+            showPlayServicesUpdateDialog: true,
+        });
+        const { idToken } = await GoogleSignin.signIn();
+        const googleCredential = auth.GoogleAuthProvider.credential(idToken);
+        return auth().signInWithCredential(googleCredential);
+    } catch (error) {
+        throw error;
+    }
 };
 
 export const signOut = async () => {
@@ -44,6 +56,14 @@ export const signOut = async () => {
 export const sendRestPassEmail = async (email) => {
     try {
         await auth().sendPasswordResetEmail(email);
+    } catch (error) {
+        throw error;
+    }
+};
+
+export const sendVerificEmail = async () => {
+    try {
+        await auth().currentUser.sendEmailVerification();
     } catch (error) {
         throw error;
     }

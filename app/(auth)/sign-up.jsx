@@ -16,7 +16,7 @@ import {
     GoogleButton,
 } from "../../components";
 import { images } from "../../constants";
-import { registerWithPass } from "../../utils/authUser";
+import { registerWithPass, signinWithGoogle } from "../../utils/authUser";
 import { validateForm } from "../../utils/formValidations";
 
 const SignUp = () => {
@@ -96,7 +96,24 @@ const SignUp = () => {
         }
     };
 
-    const handleGoogleSignup = async () => {};
+    const handleGoogleSignup = async () => {
+        setSubmitting(true);
+        try {
+            const userCred = await signinWithGoogle();
+            if (userCred.user) {
+                router.dismissAll();
+                router.replace("/home");
+            }
+        } catch (error) {
+            setErrMsg({
+                title: "Sign Up Failed",
+                subtitle:
+                    "An unexpected error occurred. Please try again later.",
+            });
+        } finally {
+            setSubmitting(false);
+        }
+    };
 
     return (
         <View className="w-full h-full">
